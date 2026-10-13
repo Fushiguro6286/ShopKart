@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import customerRoutes from "./routes/customer.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import wishlistRoutes from "./routes/wishlist.routes.js";
+import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 
 // Node on Windows can fail SRV lookups for mongodb+srv:// URIs; use public DNS
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
@@ -19,6 +21,8 @@ app.use(cookieParser());
 app.use("/customers", customerRoutes);
 app.use("/products", productRoutes);
 app.use("/wishlist", wishlistRoutes);
+app.use("/cart", cartRoutes);
+app.use("/orders", orderRoutes);
 
 app.get("/", (req, res) => {
   res.send("ShopKart Auth API is running");

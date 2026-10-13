@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginCustomer } from "../services/api.js";
+import { useCart } from "../context/CartContext.jsx";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { refreshCart } = useCart();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,7 @@ function Login() {
     setLoading(true);
     try {
       await loginCustomer(form);
+      refreshCart(); // load this user's saved cart into the shared state
       navigate("/home");
     } catch (err) {
       setError("Invalid Credentials");

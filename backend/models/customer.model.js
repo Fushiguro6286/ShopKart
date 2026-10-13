@@ -11,6 +11,17 @@ const customerSchema = new mongoose.Schema(
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
       default: [],
     },
+    // A cart row needs a quantity too; price and stock are always read from Product
+    cart: {
+      type: [
+        {
+          _id: false,
+          product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+          quantity: { type: Number, default: 1, min: [1, "Quantity must be at least 1"] },
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );

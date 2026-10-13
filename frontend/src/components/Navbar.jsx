@@ -1,10 +1,15 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutCustomer } from "../services/api.js";
+import { useCart } from "../context/CartContext.jsx";
 
 function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const isLoggedInPage = ["/home", "/products", "/wishlist"].some((p) => pathname.startsWith(p));
+  // Count comes from the shared cart state, so it updates without fetching here
+  const { totalUnits, clearCart } = useCart();
+  const isLoggedInPage = ["/home", "/products", "/wishlist", "/cart", "/checkout", "/orders"].some((p) =>
+    pathname.startsWith(p)
+  );
 
   const handleLogout = async () => {
     try {
@@ -12,6 +17,7 @@ function Navbar() {
     } catch (error) {
       // Cookie may already be gone; still send the user to login
     }
+    clearCart();
     navigate("/login");
   };
 
@@ -27,6 +33,10 @@ function Navbar() {
             <NavLink to="/home" end>Home</NavLink>
             <NavLink to="/products">Products</NavLink>
             <NavLink to="/wishlist">Wishlist</NavLink>
+            <NavLink to="/cart">
+              Cart <span className="cart-count">{totalUnits}</span>
+            </NavLink>
+            <NavLink to="/orders">Orders</NavLink>
             <button onClick={handleLogout} className="btn btn-outline">
               Logout
             </button>
